@@ -163,8 +163,8 @@ async def analyze(body: AnalyzeRequest):
         tree = await gh_get(client, f"/repos/{owner}/{name}/git/trees/{meta.get('default_branch', 'main')}", {"recursive": "1"})
         files_list = [{"path": x["path"], "type": x["type"]} for x in tree.get("tree", []) if x.get("type") == "blob"][:250]
         commits = await gh_get(client, f"/repos/{owner}/{name}/commits", {"per_page": 10})
-        all_issues = await gh_get(client, f"/repos/{owner}/{name}/issues", {"state": "open", "per_page": 15})
-        issues = [i for i in all_issues if "pull_request" not in i]
+        all_issues = await gh_get(client, f"/repos/{owner}/{name}/issues", {"state": "open", "per_page": 50})
+        issues = [i for i in all_issues if "pull_request" not in i][:15]
         prs = await gh_get(client, f"/repos/{owner}/{name}/pulls", {"state": "open", "per_page": 10})
 
     prompt = (
