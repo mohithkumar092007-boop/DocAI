@@ -2,6 +2,15 @@
 
 A full-stack hackathon MVP that turns a GitHub repository's README, file tree, commits, open issues, and pull requests into an onboarding guide. It includes a React dashboard, FastAPI backend, SQLite persistence, optional local Ollama model support, and repository Q&A.
 
+**Live demo:** [doc-ai-snowy.vercel.app](https://doc-ai-snowy.vercel.app)
+
+## Screenshots
+
+![Overview](docs/overview.png)
+![Onboarding docs](docs/docs.png)
+![Ask the codebase](docs/ask.png)
+![Repository files](docs/files.png)
+
 ## Features
 - Analyze public GitHub repositories by URL.
 - Display repository metadata, recent commits, open issues, and pull requests.
