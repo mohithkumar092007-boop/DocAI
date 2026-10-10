@@ -176,7 +176,7 @@ async def analyze(body: AnalyzeRequest):
     ai_summary, ai_used = await ollama_generate(prompt)
     if not ai_summary:
         ai_summary = (meta.get("description") or "No repository description is available.") + (
-            "\n\n" + readme[:700] if readme else ""
+            "\n\n" + clean_readme(readme) if readme else ""
         )
     docs = make_docs(repo, meta, readme, files_list, commits, issues, prs, ai_summary)
     # Simple graph: directories and files, suitable for an initial demo.
@@ -268,3 +268,11 @@ def saved():
     with db() as con:
         rows = con.execute("SELECT repo, updated_at FROM analyses ORDER BY updated_at DESC LIMIT 25").fetchall()
     return {"items": [dict(r) for r in rows]}
+def clean_readme(text, limit=700):
+    text = re.sub(r"\[!\[[^\]]*\]\([^)]*\)\]\([^)]*\)", "", text)  # linked badges
+    text = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", text)                # markdown images
+    text = re.sub(r"<[^>]+>", " ", text)                            # HTML tags
+    text = re.sub(r"\s+", " ", text).strip()
+    if len(text) <= limit:
+        return text
+    return text[:limit].rsplit(" ", 1)[0] + "..."
